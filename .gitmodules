@@ -1,0 +1,3 @@
+[submodule "src/kiosk.js"]
+	path = src/kiosk.js
+	url = https://github.com/kioskprotocol/kiosk.js

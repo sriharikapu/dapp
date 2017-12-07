@@ -1,0 +1,4 @@
+export const NO_ADDRESS = "NO_ADDRESS";
+export const ADD_ADDRESS = "ADD_ADDRESS";
+export const EDIT_ADDRESS = "EDIT_ADDRESS";
+export const COMPLETE_PAYMENT = "COMPLETE_PAYMENT";

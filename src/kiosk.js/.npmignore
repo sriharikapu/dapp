@@ -1,0 +1,6 @@
+src
+migrations
+node_modules
+test
+.env
+truffle.js
