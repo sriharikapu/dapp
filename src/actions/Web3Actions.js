@@ -1,5 +1,5 @@
 import * as types from "../constants/ActionTypes";
-import Kiosk from "../kiosk.js/src/index.js";
+import Kiosk from "kioskjs";
 import Web3 from "web3";
 import "whatwg-fetch";
 import { getDINSuccess } from "./ProductActions";
@@ -115,6 +115,8 @@ export const initializeKiosk = () => async (dispatch, getState) => {
     dispatch(fetchExchangeRate(currency.ticker));
 
     const kiosk = new Kiosk(web3, networkId);
+
+    console.log(kiosk);
 
     if (kiosk.web3) {
         dispatch(initalizeKioskSuccess(kiosk));
