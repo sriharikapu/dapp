@@ -9,7 +9,7 @@ const mapStateToProps = state => {
     }
 }
 
-const Confirmation = ({ address }) => {
+const OrderConfirmation = ({ address }) => {
     return (
         <div>
             <div style={{ textAlign: "center", margin: "50px" }}>
@@ -60,4 +60,4 @@ const Confirmation = ({ address }) => {
     );
 };
 
-export default connect(mapStateToProps)(Confirmation);
+export default connect(mapStateToProps)(OrderConfirmation);

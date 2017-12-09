@@ -9,7 +9,7 @@ const mapStateToProps = state => {
     return {
         mode: state.mode,
         metamask: state.metamask,
-        disclaimerChecked: state.checkedDisclaimer
+        orderStatus: state.orderStatus
     };
 };
 

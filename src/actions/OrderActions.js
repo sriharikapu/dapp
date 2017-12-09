@@ -1,10 +1,27 @@
 import { urlParameter } from "../utils/URLUtils";
+import * as types from "../constants/ActionTypes";
+import * as modes from "../constants/Modes";
+import { pushRoute } from "../actions/NavigationActions";
 // import { privateKeys } from "../constants/Accounts";
 
 const getAffiliate = () => {
     return urlParameter("affiliate")
         ? urlParameter("affiliate")
         : "0x0000000000000000000000000000000000000000";
+};
+
+const updateOrderStatus = status => dispatch => {
+    if (status === modes.ORDER_SUCCESS) {
+        dispatch(pushRoute("/success"));
+    } else if (status === modes.ORDER_ERROR) {
+        console.log("ERROR");
+        dispatch(pushRoute("/success"));
+    }
+
+    dispatch({
+        type: types.UPDATE_ORDER_STATUS,
+        status: status
+    });
 };
 
 // Send the shipping address to the URL set by the merchant.
@@ -26,20 +43,21 @@ export const orderData = (txHash, nonce, address) => {
     return data;
 };
 
-const handleOrderSuccess = (result, nonce, shippingAddress, product) => {
+const handleOrderSuccess = (
+    result,
+    nonce,
+    shippingAddress,
+    product
+) => dispatch => {
     const txHash = result.transactionHash;
     const data = orderData(txHash, nonce, shippingAddress);
 
-    console.log(txHash);
-    console.log(data);
-
     postCheckout(product.checkoutURL, data)
         .then(response => {
-            console.log(response);
+            dispatch(updateOrderStatus(modes.ORDER_SUCCESS));
         })
         .catch(error => {
-            // TODO: Handle error
-            console.log(error);
+            dispatch(updateOrderStatus(modes.ORDER_ERROR));
         });
 };
 
@@ -81,6 +99,7 @@ export const buyProduct = () => async (dispatch, getState) => {
 
     // TODO: Get loyalty balance
     // const loyaltyBalance = await kiosk.getERC20Balance(account, loyaltyToken);
+    dispatch(updateOrderStatus(modes.ORDER_PENDING));
 
     try {
         const result = await kiosk.executeBuy(
@@ -91,14 +110,11 @@ export const buyProduct = () => async (dispatch, getState) => {
             account
         );
         if (result.events.LogError) {
-            console.log("ERROR!");
             console.log(result);
         } else {
-            console.log("SUCCESS!");
-            handleOrderSuccess(result, nonce, address, product);
+            dispatch(handleOrderSuccess(result, nonce, address, product));
         }
     } catch (error) {
-        console.log("ERROR!");
-        console.log(error);
+        dispatch(updateOrderStatus(null));
     }
 };

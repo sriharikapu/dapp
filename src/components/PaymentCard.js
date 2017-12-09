@@ -7,7 +7,7 @@ import {
 } from "@shopify/polaris";
 import * as modes from "../constants/Modes";
 
-const PaymentCard = ({ prices, mode, metamask, buyProduct }) => {
+const PaymentCard = ({ prices, mode, metamask, buyProduct, orderStatus }) => {
   let payButton;
 
   if (!metamask) {
@@ -27,7 +27,7 @@ const PaymentCard = ({ prices, mode, metamask, buyProduct }) => {
     );
   } else {
     payButton = (
-      <Button primary size="large" onClick={buyProduct}>
+      <Button primary size="large" loading={orderStatus === modes.ORDER_PENDING} onClick={buyProduct}>
         Pay with MetaMask
       </Button>
     );
