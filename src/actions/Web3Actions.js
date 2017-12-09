@@ -104,7 +104,7 @@ export const initializeKiosk = () => async (dispatch, getState) => {
     } else {
         web3 = new Web3(
             new Web3.providers.HttpProvider(
-                "https://kovan.infura.io/MswqGvkxMnwzGebFcH6N"
+                "https://rinkeby.infura.io/MswqGvkxMnwzGebFcH6N"
             )
         );
         dispatch(metamask(false));
@@ -113,10 +113,7 @@ export const initializeKiosk = () => async (dispatch, getState) => {
     const networkId = await web3.eth.net.getId();
 
     dispatch(fetchExchangeRate(currency.ticker));
-
     const kiosk = new Kiosk(web3, networkId);
-
-    console.log(kiosk);
 
     if (kiosk.web3) {
         dispatch(initalizeKioskSuccess(kiosk));

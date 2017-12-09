@@ -7,7 +7,7 @@
     "ajv": "^5.5.0",
     "dotenv": "^4.0.0",
     "history": "^4.7.2",
-    "kioskjs": "0.0.26",
+    "kioskjs": "0.0.31",
     "react": "^16.1.1",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.1.1",

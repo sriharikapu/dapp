@@ -9,11 +9,11 @@ const getAffiliate = () => {
 
 // Send the shipping address to the URL set by the merchant.
 // application/x-www-form-urlencoded
-export const orderData = (orderID, nonce, address) => {
+export const orderData = (txHash, nonce, address) => {
     // URL encode the order ID and nonce
-    const idParam = "id=" + encodeURIComponent(orderID);
+    const txHashParam = "transactionHash=" + encodeURIComponent(txHash);
     const nonceParam = "nonce=" + encodeURIComponent(nonce);
-    let data = [idParam, nonceParam];
+    let data = [txHashParam, nonceParam];
     // URL encode the address
     for (let property in address) {
         const encodedKey = encodeURIComponent(property);
@@ -26,12 +26,12 @@ export const orderData = (orderID, nonce, address) => {
     return data;
 };
 
-const handleOrderSuccess = (result, nonce) => (dispatch, getState) => {
-    console.log("SUCCESS!");
-    const { address, product } = getState();
+const handleOrderSuccess = (result, nonce, shippingAddress, product) => {
+    const txHash = result.transactionHash;
+    const data = orderData(txHash, nonce, shippingAddress);
 
-    const orderID = result.events.NewOrder.returnValues.orderID;
-    const data = orderData(orderID, nonce, address);
+    console.log(txHash);
+    console.log(data);
 
     postCheckout(product.checkoutURL, data)
         .then(response => {
@@ -71,10 +71,7 @@ const getOrder = (product, quantity, kiosk) => {
 };
 
 export const buyProduct = () => async (dispatch, getState) => {
-    const { kiosk, product, selectedQuantity, account } = getState();
-
-    // Validate product
-    // Validate address
+    const { kiosk, product, selectedQuantity, account, address } = getState();
 
     const order = getOrder(product, selectedQuantity, kiosk);
 
@@ -93,14 +90,12 @@ export const buyProduct = () => async (dispatch, getState) => {
             order.signature,
             account
         );
-
-        console.log(result);
-
-        if (result.events.NewOrder) {
-            handleOrderSuccess(result, nonce);
-        } else if (result.events.LogError) {
+        if (result.events.LogError) {
             console.log("ERROR!");
             console.log(result);
+        } else {
+            console.log("SUCCESS!");
+            handleOrderSuccess(result, nonce, address, product);
         }
     } catch (error) {
         console.log("ERROR!");
