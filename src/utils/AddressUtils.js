@@ -2,6 +2,14 @@ export const fullName = address => {
     return [address.first_name, address.last_name].join(" ");
 };
 
+export const address1 = address => {
+    return [address.address1, address.address2].join(" ");
+};
+
+export const address2 = address => {
+    return [[address.city, address.province].join(", "), address.zip].join(" ");
+}
+
 export const addressString = address => {
     return [
         address.address1,

@@ -8,6 +8,7 @@ import configureStore from "./store/configureStore";
 import App from "./App";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
+import Confirmation from "./components/Confirmation";
 import "@shopify/polaris/styles.css";
 import "./index.css";
 
@@ -23,12 +24,14 @@ render(
     <Provider store={store}>
         <Router history={history}>
             <div>
-                <Route path="/" component={App} />
-                <Route exact path="/cart" component={Cart} />
-                <Route exact path="/checkout" component={Checkout} />
+                <Route path="/" component={Confirmation} />
             </div>
         </Router>
     </Provider>,
     document.getElementById("root")
 );
 registerServiceWorker();
+
+// <Route path="/" component={App} />
+// <Route exact path="/cart" component={Cart} />
+// <Route exact path="/checkout" component={Checkout} />

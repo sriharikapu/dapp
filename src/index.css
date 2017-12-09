@@ -1,13 +1,22 @@
 body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-.Polaris-DisplayText--sizeLarge{
-  font-size:2.0rem;
-  font-weight:600;
-  line-height:2.4rem; }
-  @media (min-width: 40em){
-    .Polaris-DisplayText--sizeLarge{
-      font-size:2.4rem;
-      line-height:2.8rem; } }
+.Polaris-DisplayText--sizeLarge {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 2.4rem;
+}
+@media (min-width: 40em) {
+    .Polaris-DisplayText--sizeLarge {
+        font-size: 2.4rem;
+        line-height: 2.8rem;
+    }
+}
+
+.Kiosk-DisplayText--Large {
+    font-size: 4.0rem;
+    font-weight: 600;
+    line-height: 4.0rem;
+}
