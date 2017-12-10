@@ -24,6 +24,13 @@ const updateOrderStatus = status => dispatch => {
     });
 };
 
+const orderSummary = order => {
+    return {
+        type: types.ORDER_SUMMARY,
+        order: order
+    };
+};
+
 // Send the shipping address to the URL set by the merchant.
 // application/x-www-form-urlencoded
 export const orderData = (txHash, nonce, address) => {
@@ -112,6 +119,7 @@ export const buyProduct = () => async (dispatch, getState) => {
         if (result.events.LogError) {
             console.log(result);
         } else {
+            dispatch(orderSummary(order));
             dispatch(handleOrderSuccess(result, nonce, address, product));
         }
     } catch (error) {

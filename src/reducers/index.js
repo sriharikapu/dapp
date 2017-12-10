@@ -192,11 +192,20 @@ const showCartPreview = (state = false, action) => {
 const orderStatus = (state = null, action) => {
     switch (action.type) {
         case types.UPDATE_ORDER_STATUS:
-            return action.status
+            return action.status;
         default:
             return state;
     }
-}
+};
+
+const orderSummary = (state = null, action) => {
+    switch (action.type) {
+        case types.ORDER_SUMMARY:
+            return action.order;
+        default:
+            return state;
+    }
+};
 
 const rootReducer = combineReducers({
     debug,
@@ -217,6 +226,7 @@ const rootReducer = combineReducers({
     showErrors,
     showCartPreview,
     orderStatus,
+    orderSummary,
     router: routerReducer
 });
 

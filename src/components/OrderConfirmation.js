@@ -5,11 +5,44 @@ import { fullName, address1, address2 } from "../utils/AddressUtils";
 
 const mapStateToProps = state => {
     return {
-        address: state.address
-    }
-}
+        address: state.address,
+        orderSummary: state.orderSummary
+    };
+};
 
-const OrderConfirmation = ({ address }) => {
+const OrderConfirmation = ({ address, orderSummary }) => {
+    let addressSection = null;
+
+    if (address) {
+        addressSection = (
+            <div style={{ flex: "1", margin: "20px" }}>
+                <div style={{ marginBottom: "10px" }}>
+                    <strong>Shipping Address</strong>
+                </div>
+                <p>{fullName(address)}</p>
+                <p>{address1(address)}</p>
+                <p>{address2(address)}</p>
+                <p>{address.country}</p>
+            </div>
+        );
+    }
+
+    let orderSummarySection = null;
+
+    if (orderSummary) {
+        orderSummarySection = (
+            <div style={{ flex: "1", margin: "20px" }}>
+                <div style={{ marginBottom: "10px" }}>
+                    <strong>Order Summary</strong>
+                </div>
+                <p>{"Order ID: " + orderSummary.orderID}</p>
+                <p>{"DIN: " + orderSummary.DIN}</p>
+                <p>{"Quantity: " + orderSummary.quantity}</p>
+                <p>{"Total Price: " + orderSummary.totalPrice}</p>
+            </div>
+        );
+    }
+
     return (
         <div>
             <div style={{ textAlign: "center", margin: "50px" }}>
@@ -31,28 +64,8 @@ const OrderConfirmation = ({ address }) => {
                             width: "600px"
                         }}
                     >
-                        <div style={{ flex: "1", margin: "20px" }}>
-                            <div style={{ marginBottom: "10px" }}>
-                                <strong>Shipping Address</strong>
-                            </div>
-                            <p>{address ? fullName(address) : ""}</p>
-                            <p>{address ? address1(address) : ""}</p>
-                            <p>{address ? address2(address) : ""}</p>
-                            <p>{address ? address.country : ""}</p>
-                        </div>
-                        <div style={{ flex: "1", margin: "20px" }}>
-                            <div style={{ marginBottom: "10px" }}>
-                                <strong>Order Summary</strong>
-                            </div>
-                            <div style={{ marginBottom: "10px" }}>
-                                <p>Transaction Hash:</p>
-                                <p>Order ID:</p>
-                                <p>DIN:</p>
-                                <p>Quantity:</p>
-                                <p>Total Price:</p>
-                            </div>
-                            <p>Proof of Purchase:</p>
-                        </div>
+                        {addressSection}
+                        {orderSummarySection}
                     </div>
                 </Card>
             </div>
