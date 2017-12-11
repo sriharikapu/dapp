@@ -5,6 +5,7 @@
   "dependencies": {
     "@shopify/polaris": "^1.8.3",
     "ajv": "^5.5.0",
+    "blockies": "0.0.2",
     "dotenv": "^4.0.0",
     "history": "^4.7.2",
     "kioskjs": "0.0.31",

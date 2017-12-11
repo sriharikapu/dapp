@@ -10,7 +10,7 @@ const ProductSection = ({ product }) => {
             <div style={{ marginLeft: "20px", width: "100%" }}>
                 <TextStyle variation="strong">{product.name}</TextStyle>
                 <div style={{ marginTop: "4px" }}>
-                    <TextStyle>{"DIN: " + product.DIN}</TextStyle>
+                    <TextStyle variation="subdued">{"DIN: " + product.DIN}</TextStyle>
                 </div>
             </div>
         </div>

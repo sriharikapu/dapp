@@ -34,7 +34,7 @@ const PaymentCard = ({ prices, mode, metamask, buyProduct, orderStatus }) => {
   }
 
   return (
-    <Card sectioned title="2. Complete payment">
+    <Card sectioned title="Complete payment">
       <Collapsible open={mode === modes.COMPLETE_PAYMENT}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ margin: "20px" }}>{payButton}</div>

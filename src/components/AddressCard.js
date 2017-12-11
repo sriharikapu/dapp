@@ -15,7 +15,7 @@ const AddressCard = ({
     cancelAddress
 }) => {
     return (
-        <Card sectioned title={"1. Shipping Address"}>
+        <Card sectioned title={"Shipping address"}>
             <Collapsible open={mode === modes.COMPLETE_PAYMENT}>
                 <AddressSelect
                     name={name}

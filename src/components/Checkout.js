@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Page, Layout, DisplayText } from "@shopify/polaris";
 import AddressContainer from "../containers/AddressContainer";
 import PaymentContainer from "../containers/PaymentContainer";
+import Account from "../components/Account";
 import CartPopover from "../components/CartPopover";
 import CurrencyPicker from "../components/CurrencyPicker";
 import { pushRoute } from "../actions/NavigationActions";
@@ -10,6 +11,7 @@ import { toggleCartPreview } from "../actions/ProductActions";
 
 const mapStateToProps = state => {
   return {
+    account: state.account,
     product: state.product,
     prices: state.prices,
     showCartPreview: state.showCartPreview
@@ -19,6 +21,7 @@ const mapStateToProps = state => {
 class Checkout extends Component {
   render() {
     const {
+      account,
       product,
       prices,
       showCartPreview,
@@ -33,25 +36,28 @@ class Checkout extends Component {
 
     return (
       <Page>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "20px"
+          }}
+        >
+          <DisplayText size="extraLarge">Checkout</DisplayText>
+          <CartPopover
+            product={product}
+            show={showCartPreview}
+            pushRoute={pushRoute}
+            toggleCartPreview={toggleCartPreview}
+          />
+          <CurrencyPicker />
+        </div>
         <Layout>
+          <Layout.Section secondary>
+            <Account account={account} />
+          </Layout.Section>
           <Layout.Section>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "30px"
-              }}
-            >
-              <DisplayText size="extraLarge">Checkout</DisplayText>
-              <CartPopover
-                product={product}
-                show={showCartPreview}
-                pushRoute={pushRoute}
-                toggleCartPreview={toggleCartPreview}
-              />
-              <CurrencyPicker />
-            </div>
             <AddressContainer />
             <PaymentContainer prices={prices} />
           </Layout.Section>
