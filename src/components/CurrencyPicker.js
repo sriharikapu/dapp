@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Popover, Button, ActionList } from "@shopify/polaris";
-import { updateCurrency } from "../actions/PriceActions";
+import { selectCurrency } from "../actions/PriceActions";
 
 const mapStateToProps = state => {
     return {
-        currency: state.currency
+        currency: state.selectedCurrency
     };
 };
 
@@ -20,7 +20,7 @@ class CurrencyPicker extends Component {
 
     handleCurrencyChange(ticker) {
         this.setState({ active: false });
-        this.props.updateCurrency(ticker);
+        this.props.selectCurrency(ticker);
     }
 
     render() {
@@ -38,7 +38,7 @@ class CurrencyPicker extends Component {
                                     });
                                 }}
                             >
-                                {this.props.currency.ticker}
+                                {this.props.currency}
                             </Button>
                         }
                         onClose={() => this.setState({ active: false })}
@@ -64,4 +64,4 @@ class CurrencyPicker extends Component {
     }
 }
 
-export default connect(mapStateToProps, { updateCurrency })(CurrencyPicker);
+export default connect(mapStateToProps, { selectCurrency })(CurrencyPicker);

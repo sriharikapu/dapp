@@ -92,7 +92,7 @@ export const getAccountBalances = account => async (dispatch, getState) => {
 };
 
 export const initializeKiosk = () => async (dispatch, getState) => {
-    const { currency, web3Provider } = getState();
+    const { selectedCurrency, web3Provider } = getState();
 
     let web3;
 
@@ -112,7 +112,7 @@ export const initializeKiosk = () => async (dispatch, getState) => {
 
     const networkId = await web3.eth.net.getId();
 
-    dispatch(fetchExchangeRate(currency.ticker));
+    dispatch(fetchExchangeRate(selectedCurrency));
     const kiosk = new Kiosk(web3, networkId);
 
     if (kiosk.web3) {

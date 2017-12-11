@@ -1,18 +1,26 @@
 import * as types from "../constants/ActionTypes";
+import { formattedPrice } from "../utils/PriceUtils";
 
-export const updateCurrency = ticker => dispatch => {
+export const selectCurrency = ticker => dispatch => {
     dispatch({
-        type: types.UPDATE_CURRENCY,
+        type: types.SELECT_CURRENCY,
         ticker: ticker
     });
     dispatch(getPrices());
 };
 
 export const getPrices = () => (dispatch, getState) => {
-    const { product, selectedQuantity, currency } = getState();
+    const {
+        product,
+        selectedQuantity,
+        selectedCurrency,
+        exchangeRates
+    } = getState();
     if (product) {
-        const total = dispatch(
-            formattedPrice(product.price * selectedQuantity, currency)
+        const total = formattedPrice(
+            product.price * selectedQuantity,
+            selectedCurrency,
+            exchangeRates ? exchangeRates[selectedCurrency] : 0
         );
         const newPrices = {
             total: total
@@ -24,11 +32,11 @@ export const getPrices = () => (dispatch, getState) => {
     }
 };
 
-const fetchExchangeRateSuccess = (ticker, ethPrice) => {
+const fetchExchangeRateSuccess = (ticker, exchangeRate) => {
     return {
-        type: types.UPDATE_CURRENCY,
+        type: types.ADD_EXCHANGE_RATE,
         ticker: ticker,
-        ethPrice: ethPrice
+        exchangeRate: exchangeRate // Currency units (e.g., USD) / ETH
     };
 };
 
@@ -45,30 +53,8 @@ export const fetchExchangeRate = ticker => async dispatch => {
         dispatch(getPrices());
     } catch (error) {
         console.log(error);
+        // TODO: Better fallback
         dispatch(fetchExchangeRateSuccess(ticker, 400));
         dispatch(getPrices());
-    }
-};
-
-export const formattedPrice = (wei, currency) => (dispatch, getState) => {
-    const weiPrice = parseInt(wei, 10);
-
-    if (!weiPrice || !currency) {
-        return "--";
-    }
-
-    const eth = weiPrice / Math.pow(10, 18);
-
-    switch (currency.ticker) {
-        case "USD":
-            const usdPrice = eth * currency.ethPrice;
-            const decimalUSDPrice = usdPrice.toFixed(2);
-            const formattedUSDPrice = "$" + decimalUSDPrice.toString();
-            return formattedUSDPrice;
-        case "ETH":
-            const formattedETHPrice = eth.toFixed(3) + " ETH";
-            return formattedETHPrice;
-        default:
-            return "";
     }
 };

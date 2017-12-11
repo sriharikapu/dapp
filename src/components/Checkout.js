@@ -12,6 +12,8 @@ import { toggleCartPreview } from "../actions/ProductActions";
 const mapStateToProps = state => {
   return {
     account: state.account,
+    balances: state.balances,
+    exchangeRates: state.exchangeRates,
     product: state.product,
     prices: state.prices,
     showCartPreview: state.showCartPreview
@@ -22,6 +24,8 @@ class Checkout extends Component {
   render() {
     const {
       account,
+      balances,
+      exchangeRates,
       product,
       prices,
       showCartPreview,
@@ -55,7 +59,11 @@ class Checkout extends Component {
         </div>
         <Layout>
           <Layout.Section secondary>
-            <Account account={account} />
+            <Account
+              account={account}
+              balances={balances}
+              exchangeRates={exchangeRates}
+            />
           </Layout.Section>
           <Layout.Section>
             <AddressContainer />

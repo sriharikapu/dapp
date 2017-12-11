@@ -1,9 +1,10 @@
 import React from "react";
 import { Card } from "@shopify/polaris";
 import blockies from "blockies";
+import { formattedPrice } from "../utils/PriceUtils";
 
-const Account = ({ account }) => {
-    if (!account) {
+const Account = ({ account, balances, exchangeRates }) => {
+    if (!account || !balances || !exchangeRates) {
         return null;
     }
     return (
@@ -33,21 +34,21 @@ const Account = ({ account }) => {
                     </p>
                 </div>
             </Card.Section>
+            <Card.Section>
+                <strong>Ether</strong>
+                <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                    <p>{formattedPrice(balances.ETH, "ETH")}</p>
+                    <p>{formattedPrice(balances.ETH, "USD", exchangeRates.USD)}</p>
+                </div>
+            </Card.Section>
         </Card>
     );
 };
 
 export default Account;
 
-// <Card.Section>
-//     <strong>Ether</strong>
-//     <div
-//         style={{ display: "flex", justifyContent: "space-between" }}
-//     >
-//         <p>1.000 ETH</p>
-//         <p>$200.00</p>
-//     </div>
-// </Card.Section>
 // <Card.Section>
 //     <strong>Ethereum Bookstore</strong>
 //     <div

@@ -111,14 +111,22 @@ const prices = (state = initialPrices, action) => {
     }
 };
 
-const currency = (state = { ticker: "USD", ethPrice: null }, action) => {
+const exchangeRates = (state = null, action) => {
     switch (action.type) {
-        case types.UPDATE_CURRENCY:
+        case types.ADD_EXCHANGE_RATE:
             return {
                 ...state,
-                ticker: action.ticker,
-                ethPrice: action.ethPrice ? action.ethPrice : state.ethPrice
+                [action.ticker]: action.exchangeRate
             };
+        default:
+            return state;
+    }
+};
+
+const selectedCurrency = (state = "USD", action) => {
+    switch (action.type) {
+        case types.SELECT_CURRENCY:
+            return action.ticker;
         default:
             return state;
     }
@@ -219,7 +227,8 @@ const rootReducer = combineReducers({
     loyaltyToken,
     product,
     prices,
-    currency,
+    selectedCurrency,
+    exchangeRates,
     selectedQuantity,
     mode,
     address,
