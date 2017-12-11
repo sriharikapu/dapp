@@ -1,4 +1,6 @@
 import * as types from "../constants/ActionTypes";
+import * as modes from "../constants/Modes";
+import * as errors from "../constants/Errors";
 import Kiosk from "kioskjs";
 import Web3 from "web3";
 import "whatwg-fetch";
@@ -6,15 +8,20 @@ import { getDINSuccess } from "./ProductActions";
 import { fetchExchangeRate } from "./PriceActions";
 import { urlParameter } from "../utils/URLUtils";
 
-const initalizeKioskSuccess = (kiosk, web3) => ({
+const initializeKioskSuccess = kiosk => ({
     type: types.INITIALIZE_KIOSK_SUCCESS,
     kiosk: kiosk
 });
 
-const metamask = available => ({
-    type: types.METAMASK,
-    available: available
+const web3Status = status => ({
+    type: types.WEB3_STATUS,
+    status: status
 });
+
+const web3Error = error => ({
+    type: types.WEB3_ERROR,
+    error: error
+})
 
 const account = account => ({
     type: types.ACCOUNT,
@@ -41,9 +48,8 @@ const loyaltyToken = token => ({
     token: token
 });
 
-export const getAccount = () => async (dispatch, getState) => {
-    const { kiosk } = getState();
-    const accounts = await kiosk.web3.eth.getAccounts();
+export const getAccount = web3 => async dispatch => {
+    const accounts = await web3.eth.getAccounts();
     if (accounts.length > 0) {
         const defaultAccount = accounts[0];
         dispatch(account(defaultAccount));
@@ -91,43 +97,42 @@ export const getAccountBalances = account => async (dispatch, getState) => {
     return balances;
 };
 
+export const initializeInfura = error => dispatch => {
+    const web3 = new Web3(
+        new Web3.providers.HttpProvider(
+            "https://rinkeby.infura.io/MswqGvkxMnwzGebFcH6N"
+        )
+    );
+    dispatch(web3Status(modes.READ_ONLY));
+    const kiosk = new Kiosk(web3, "4");
+    dispatch(initializeKioskSuccess(kiosk));
+    dispatch(web3Error(error));
+};
+
 export const initializeKiosk = () => async (dispatch, getState) => {
-    const { selectedCurrency, web3Provider } = getState();
-
-    let web3;
-
-    // TODO: Add debug network (localhost)
-
-    if (typeof window.web3 !== "undefined" && !web3Provider) {
-        web3 = new Web3(window.web3.currentProvider);
-        dispatch(metamask(true));
-    } else {
-        web3 = new Web3(
-            new Web3.providers.HttpProvider(
-                "https://rinkeby.infura.io/MswqGvkxMnwzGebFcH6N"
-            )
-        );
-        dispatch(metamask(false));
-    }
-
-    const networkId = await web3.eth.net.getId();
+    const { selectedCurrency } = getState();
 
     dispatch(fetchExchangeRate(selectedCurrency));
-    const kiosk = new Kiosk(web3, networkId);
 
-    if (kiosk.web3) {
-        dispatch(initalizeKioskSuccess(kiosk));
-
-        const token = await kiosk.getLoyaltyToken();
-        dispatch(loyaltyToken(token));
-
-        dispatch(getAccount());
-
-        const products = urlParameter("products");
-
-        if (products) {
-            const DINs = products.split(" ");
-            dispatch(getDINSuccess(DINs[0]));
+    if (typeof window.web3 !== "undefined") {
+        const web3 = new Web3(window.web3.currentProvider);
+        dispatch(web3Status(modes.READ_WRITE));
+        const networkId = await web3.eth.net.getId();
+        const kiosk = new Kiosk(web3, networkId);
+        if (kiosk.web3) {
+            dispatch(initializeKioskSuccess(kiosk));
+            dispatch(getAccount(web3));
+        } else {
+            dispatch(initializeInfura(errors.WRONG_NETWORK));
         }
+    } else {
+        dispatch(initializeInfura(errors.NO_METAMASK));
+    }
+
+    const products = urlParameter("products");
+
+    if (products) {
+        const DINs = products.split(" ");
+        dispatch(getDINSuccess(DINs[0]));
     }
 };

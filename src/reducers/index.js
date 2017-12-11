@@ -3,41 +3,10 @@ import { routerReducer } from "react-router-redux";
 import { isValidAddress } from "../actions/AddressActions";
 import * as types from "../constants/ActionTypes";
 import * as modes from "../constants/Modes";
-
-const debug = (state = false, action) => {
-    return state;
-};
-
-const web3Provider = (state = null, action) => {
-    switch (action.type) {
-        case types.WEB3_PROVIDER:
-            return action.web3Provider;
-        default:
-            return state;
-    }
-};
-
-const infura = (state = null, action) => {
-    return state;
-};
-
-const kiosk = (state = null, action) => {
-    switch (action.type) {
-        case types.INITIALIZE_KIOSK_SUCCESS:
-            return action.kiosk;
-        default:
-            return state;
-    }
-};
-
-const metamask = (state = false, action) => {
-    switch (action.type) {
-        case types.METAMASK:
-            return action.available;
-        default:
-            return state;
-    }
-};
+import { debug, kiosk, web3Status, web3Error } from "./web3";
+import { prices, exchangeRates, selectedCurrency, loyaltyToken } from "./price";
+import { account, balances } from "./account";
+import { orderStatus, orderSummary } from "./order";
 
 const DIN = (state = null, action) => {
     switch (action.type) {
@@ -48,85 +17,10 @@ const DIN = (state = null, action) => {
     }
 };
 
-const account = (state = null, action) => {
-    switch (action.type) {
-        case types.ACCOUNT:
-            return action.account;
-        default:
-            return state;
-    }
-};
-
-const balances = (state = null, action) => {
-    switch (action.type) {
-        case types.ETH_BALANCE:
-            return {
-                ...state,
-                ETH: action.balance
-            };
-        case types.MARK_BALANCE:
-            return {
-                ...state,
-                MARK: action.balance
-            };
-        case types.LOYALTY_BALANCE:
-            return {
-                ...state,
-                loyalty: action.balance
-            };
-        default:
-            return state;
-    }
-};
-
-const loyaltyToken = (state = null, action) => {
-    switch (action.type) {
-        case types.LOYALTY_TOKEN:
-            return action.token;
-        default:
-            return state;
-    }
-};
-
 const product = (state = null, action) => {
     switch (action.type) {
         case types.FETCH_PRODUCT_SUCCESS:
             return action.product;
-        default:
-            return state;
-    }
-};
-
-const initialPrices = {
-    total: ""
-};
-
-// Formatted prices
-const prices = (state = initialPrices, action) => {
-    switch (action.type) {
-        case types.UPDATE_PRICES:
-            return action.prices;
-        default:
-            return state;
-    }
-};
-
-const exchangeRates = (state = null, action) => {
-    switch (action.type) {
-        case types.ADD_EXCHANGE_RATE:
-            return {
-                ...state,
-                [action.ticker]: action.exchangeRate
-            };
-        default:
-            return state;
-    }
-};
-
-const selectedCurrency = (state = "USD", action) => {
-    switch (action.type) {
-        case types.SELECT_CURRENCY:
-            return action.ticker;
         default:
             return state;
     }
@@ -197,30 +91,11 @@ const showCartPreview = (state = false, action) => {
     }
 };
 
-const orderStatus = (state = null, action) => {
-    switch (action.type) {
-        case types.UPDATE_ORDER_STATUS:
-            return action.status;
-        default:
-            return state;
-    }
-};
-
-const orderSummary = (state = null, action) => {
-    switch (action.type) {
-        case types.ORDER_SUMMARY:
-            return action.order;
-        default:
-            return state;
-    }
-};
-
 const rootReducer = combineReducers({
     debug,
-    web3Provider,
-    infura,
     kiosk,
-    metamask,
+    web3Status,
+    web3Error,
     DIN,
     account,
     balances,

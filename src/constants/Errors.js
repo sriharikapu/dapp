@@ -1,0 +1,2 @@
+export const NO_METAMASK = "NO_METAMASK";
+export const WRONG_NETWORK = "WRONG_NETWORK";

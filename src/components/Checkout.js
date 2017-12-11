@@ -38,6 +38,20 @@ class Checkout extends Component {
       return null;
     }
 
+    let accountSection = null;
+
+    if (account) {
+      accountSection = (
+        <Layout.Section secondary>
+          <Account
+            account={account}
+            balances={balances}
+            exchangeRates={exchangeRates}
+          />
+        </Layout.Section>
+      );
+    }
+
     return (
       <Page>
         <div
@@ -58,13 +72,7 @@ class Checkout extends Component {
           <CurrencyPicker />
         </div>
         <Layout>
-          <Layout.Section secondary>
-            <Account
-              account={account}
-              balances={balances}
-              exchangeRates={exchangeRates}
-            />
-          </Layout.Section>
+          {accountSection}
           <Layout.Section>
             <AddressContainer />
             <PaymentContainer prices={prices} />

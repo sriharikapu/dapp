@@ -14,9 +14,8 @@ import "./index.css";
 
 const DEBUG = false;
 // const WEB3_PROVIDER = "http://localhost:9545";
-const WEB3_PROVIDER = null;
 
-const initialState = { debug: DEBUG, web3Provider: WEB3_PROVIDER };
+const initialState = { debug: DEBUG };
 const history = createBrowserHistory();
 const store = configureStore(history, initialState);
 
