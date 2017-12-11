@@ -2,6 +2,7 @@ import { urlParameter } from "../utils/URLUtils";
 import * as types from "../constants/ActionTypes";
 import * as modes from "../constants/Modes";
 import { pushRoute } from "../actions/NavigationActions";
+import uuid from "uuid/v4";
 // import { privateKeys } from "../constants/Accounts";
 
 const getAffiliate = () => {
@@ -100,9 +101,10 @@ export const buyProduct = () => async (dispatch, getState) => {
 
     const order = getOrder(product, selectedQuantity, kiosk);
 
-    // TODO: Hash a random UUID
-    const nonce = "blah";
+    const nonce = uuid();
+    console.log(nonce);
     const nonceHash = kiosk.hash(nonce);
+    console.log(nonceHash);
 
     // TODO: Get loyalty balance
     // const loyaltyBalance = await kiosk.getERC20Balance(account, loyaltyToken);
